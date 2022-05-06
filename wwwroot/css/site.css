@@ -1,0 +1,25 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+.form-container{
+  width: 350px;
+  margin-left: 500px;
+  margin-top: 30px;
+  background-color: beige;
+  padding: 50px;
+  
+}
+h3{
+  margin-top: 30px;
+}

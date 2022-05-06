@@ -1,0 +1,200 @@
+@{
+    ViewData["Title"] = "Admin Template Page";
+}
+
+<head>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>  
+<script>  
+    function addNewMessage() {
+        let msg = document.getElementById('newTemplateMsg').value;
+        var containerDiv = document.createElement('div');
+    
+    let randomId = Math.random().toString(36).slice(2);
+        containerDiv.id = randomId;
+        containerDiv.className =
+            'msgDiv container p-2 mb-3 bd-highlight border border-dark';
+
+        var colDiv = document.createElement('div');
+        colDiv.className = 'col d-flex align-items-center justify-content-between';
+
+        var innerDiv = document.createElement('div');
+        innerDiv.className = "innerDiv"
+
+    var checkInput = document.createElement('input');
+    checkInput.type = 'checkbox';
+    checkInput.name = 'selectMsg';
+    checkInput.value = msg;
+    checkInput.id = 'checkbox';
+
+    var checkLabel = document.createElement('label');
+    checkLabel.className = 'msgText fs-5 mx-2';
+    checkLabel.innerHTML = msg;
+
+    var buttonsDiv = document.createElement('div');
+    
+    var editButton = document.createElement('button');
+    editButton.className = 'btn btn-secondary btn-sm m-1';
+    
+    editButton.innerHTML = 'Edit';
+
+    var delButton = document.createElement('button');
+    delButton.className = 'btn btn-danger btn-sm m-1';
+    
+    delButton.innerHTML = 'Del';
+
+    buttonsDiv.appendChild(editButton);
+    buttonsDiv.appendChild(delButton);
+
+    innerDiv.appendChild(checkInput);
+    innerDiv.appendChild(checkLabel);
+
+    colDiv.appendChild(innerDiv);
+    colDiv.appendChild(buttonsDiv);
+
+    containerDiv.appendChild(colDiv);
+
+    document.getElementById('main-item-div').appendChild(containerDiv);
+    editButton.addEventListener('click',function(e){
+        onEdit(randomId)
+    })
+    delButton.addEventListener('click',function(e){
+        onDel(randomId)
+    })
+    }
+    function onDel(elemId) {
+        var divToDel = document.getElementById(elemId);
+        divToDel.remove();
+    }
+    function onEdit(randomId){
+        var msgLabel = document.querySelector(`#${randomId} .col .innerDiv .msgText`)
+        let updatedMsg = prompt("Enter updated message", msgLabel.innerHTML);
+        if(updatedMsg != null && updatedMsg != ""){
+            msgLabel.innerHTML = updatedMsg;
+        }
+    }
+    
+
+    $(document).ready(function () {  
+        $("#btnPreview").click(function () {  
+            let email = $("#email").val();
+            let msg;
+            $('input[name="selectMsg"]:checked').each(function (){
+                msg = `${msg ? `${msg}, `: ""} ${this.value}`
+            });
+            const timeElapsed = Date.now();
+            const today = new Date(timeElapsed);
+            localStorage.setItem('toEmail',email);
+            localStorage.setItem('sendMsg',msg);
+            localStorage.setItem('msgTime',today.toUTCString());
+            $.ajax(  
+            {  
+                type: "POST", 
+                url: "/Home/Preview",  
+                data: { 
+                    Email: email,  
+                    Checkbox: msg
+                },
+                success: function(data){
+                    window.location.href = '@Url.Action("Preview", "Home")';
+                },
+            });  
+        });  
+    });  
+</script>  
+</head>
+<body id = "admin-body">
+    <section>
+        <div id="main-item-div" class = "w-50 mx-auto">
+            <div class = "d-flex bd-highlight mb-3">
+                <input type ="email" class= "flex-grow-1 form-control" type="search" id = "email" placeholder = "Type mail id here...">&nbsp;
+                
+            </div>
+            <div id="msg0" class="msgDiv container p-2 mb-3 bd-highlight border border-dark">
+                <div class = "col d-flex align-items-center justify-content-between">
+                    <div class="innerDiv">
+                        <input type="checkbox" name="selectMsg" value="Hope this mail finds you well!" id = "checkbox">
+                        <label class="msgText fs-5 mx-2">Hope this mail finds you well!</label>
+                    </div>
+                    <div>
+                        <button class="btn btn-secondary btn-sm m-1" onclick="onEdit('msg0')">Edit</button>
+                        <button class="btn btn-danger btn-sm m-1" onclick="onDel('msg0')">Del</button>
+                    </div>
+                </div>    
+            </div>
+            <div id="msg1" class="msgDiv container p-2 mb-3 bd-highlight border border-dark">
+                <div class = "col d-flex align-items-center justify-content-between">
+                    <div class="innerDiv">
+                        <input type="checkbox" name="selectMsg" value="It's great to hear from you!" id = "checkbox">
+                        <label class="msgText fs-5 mx-2">It's great to hear from you!</label>
+                    </div>
+                    <div>
+                        <button class="btn btn-secondary btn-sm m-1" onclick="onEdit('msg1')">Edit</button>
+                        <button class="btn btn-danger btn-sm m-1" onclick="onDel('msg1')">Del</button>
+                    </div>
+                </div>    
+            </div>
+            <div id="msg2" class="msgDiv container p-2 mb-3 bd-highlight border border-dark">
+                <div class = "col d-flex align-items-center justify-content-between">
+                    <div class="innerDiv">
+                        <input type="checkbox" name="selectMsg" value="Thankyou for your help!" id = "checkbox">
+                        <label class="msgText fs-5 mx-2">Thankyou for your help!</label>
+                    </div>
+                    <div>
+                        <button class="btn btn-secondary btn-sm m-1" onclick="onEdit('msg2')">Edit</button>
+                        <button class="btn btn-danger btn-sm m-1" onclick="onDel('msg2')">Del</button>
+                    </div>
+                </div>    
+            </div>
+            <div id="msg3" class="msgDiv container p-2 mb-3 bd-highlight border border-dark">
+                <div class = "col d-flex align-items-center justify-content-between">
+                    <div class="innerDiv">
+                        <input type="checkbox" name="selectMsg" value="Will get back to you!" id = "checkbox">
+                        <label class="msgText fs-5 mx-2">Will get back to you!</label>
+                    </div>
+                    <div>
+                        <button class="btn btn-secondary btn-sm m-1" onclick="onEdit('msg3')">Edit</button>
+                        <button class="btn btn-danger btn-sm m-1" onclick="onDel('msg3')">Del</button>
+                    </div>
+                </div>    
+            </div>
+            <div id="msg4" class="msgDiv container p-2 mb-3 bd-highlight border border-dark">
+                <div class = "col d-flex align-items-center justify-content-between">
+                    <div class="innerDiv">
+                        <input type="checkbox" name="selectMsg" value="Congratulations on your achievement!" id = "checkbox">
+                        <label class="msgText fs-5 mx-2">Congratulations on your achievement!</label>
+                    </div>
+                    <div>
+                        <button class="btn btn-secondary btn-sm m-1" onclick="onEdit('msg4')">Edit</button>
+                        <button class="btn btn-danger btn-sm m-1" onclick="onDel('msg4')">Del</button>
+                    </div>
+                </div>    
+            </div>
+            <div id="msg5" class="msgDiv container p-2 mb-3 bd-highlight border border-dark">
+                <div class = "col d-flex align-items-center justify-content-between">
+                    <div class="innerDiv">
+                        <input type="checkbox" name="selectMsg" value="Thanks for the response!" id = "checkbox">
+                        <label class="msgText fs-5 mx-2">Thanks for the response!</label>
+                    </div>
+                    <div>
+                        <button class="btn btn-secondary btn-sm m-1" onclick="onEdit('msg5')">Edit</button>
+                        <button class="btn btn-danger btn-sm m-1" onclick="onDel('msg5')">Del</button>
+                    </div>
+                </div>    
+            </div>
+            
+        </div>
+        <div class = "w-50 mx-auto">
+            <div class = "d-flex bd-highlight mb-3 justify-content-end">
+                <button class="btn btn-info" id="btnPreview" >Preview & Send</button>
+            </div>
+            <div class = "d-flex bd-highlight mb-3">
+                <input type ="text" class= "flex-grow-1 form-control" id="newTemplateMsg"  placeholder = "Create a new template message...">&nbsp; 
+                <button class="btn btn-secondary float-right" type="submit" onclick="addNewMessage()">+</button>  
+            </div>
+        </div>
+    </section>
+</body>
+
+
+
