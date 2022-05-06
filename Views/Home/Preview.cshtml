@@ -1,0 +1,31 @@
+@{
+    ViewData["Title"] = "Preview Page";
+}
+
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>  
+<script>  
+    $(document).ready(function () { 
+        var emailDOM = document.getElementById('email');
+        var msgDOM = document.getElementById('msg');
+        var dateDOM = document.getElementById('timestamp');
+
+        emailDOM.innerHTML=localStorage.getItem('toEmail');
+        msgDOM.innerHTML=localStorage.getItem('sendMsg');
+        dateDOM.innerHTML=localStorage.getItem('msgTime');
+     })
+</script>  
+</head>
+<body>
+    <p class="text-center fs-2 text-decoration-underline">PREVIEW</p>
+    <div class="container mt-5 mb-3 bd-highlight border border-dark w-50">
+        <div><span class="fs-4">EMAIL ID:</span>
+            <p class="text-danger" id = "email"></p>
+        </div>
+        <div><span class="fs-4">MESSAGE:</span>
+            <p class="text-success" id = "msg"></p>
+        </div>
+        <p class="d-flex bd-highlight mb-3 justify-content-end text-primary" id = "timestamp"></p>
+    </div>
+    <p class=" text-info mt-2 text-center fs-3">☑️ MAIL SENT</p>
+</body>

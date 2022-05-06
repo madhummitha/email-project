@@ -1,0 +1,71 @@
+@{
+    ViewData["Title"] = "User Template Page";
+}
+
+<head>
+    
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>  
+<script>  
+    $(document).ready(function () {  
+        $("#btnPreview").click(function () {  
+            let email = $("#email").val();
+            let msg ;
+            $('input[name="selectMsg"]:checked').each(function (){
+                msg = `${msg ? `${msg}, `: ""} ${this.value}`
+            });
+            const timeElapsed = Date.now();
+            const today = new Date(timeElapsed);
+            localStorage.setItem('toEmail',email);
+            localStorage.setItem('sendMsg',msg);
+            localStorage.setItem('msgTime',today.toUTCString());
+            $.ajax(  
+            {  
+                type: "POST", 
+                url: "/Home/Preview",  
+                data: { 
+                    Email: email,  
+                    Checkbox: msg
+                },
+                success: function(data){
+                    window.location.href = '@Url.Action("Preview", "Home")';
+                },
+            });  
+        });  
+    });  
+</script>  
+</head>
+<body>
+    <section>
+        <div class = "w-50 mx-auto">
+            <div class = "d-flex bd-highlight mb-3">
+                <input type ="email" class= "flex-grow-1 form-control" id = "email" type="search"  placeholder = "Type mail id here...">&nbsp;
+            </div>
+            <div class="container mb-3 p-2 bd-highlight border border-dark">
+                <input type="checkbox" name = "selectMsg" value="Hope this mail finds you well!" id = "checkbox">
+                <label>Hope this mail finds you well!</label>
+            </div>
+            <div class="container mb-3 p-2 bd-highlight border border-dark">
+                <input type="checkbox" name = "selectMsg" value="It's great to hear from you!" id = "checkbox">
+                <label>It's great to hear from you!</label>
+            </div>
+            <div class="container mb-3 p-2 bd-highlight border border-dark">
+                <input type="checkbox" name = "selectMsg" value="Thankyou for your help!" id = "checkbox">
+                <label>Thankyou for your help!</label>
+            </div>
+            <div class="container mb-3 p-2 bd-highlight border border-dark">
+                <input type="checkbox" name = "selectMsg" value="Will get back to you!" id = "checkbox">
+                <label>Will get back to you!</label>
+            </div>
+            <div class="container mb-3 p-2 bd-highlight border border-dark">
+                <input type="checkbox" name = "selectMsg" value="Congratulations on your achievement!" id = "checkbox">
+                <label>Congratulations on your achievement!</label>
+            </div>
+            <div class="container mb-3 p-2 bd-highlight border border-dark">
+                <input type="checkbox" name = "selectMsg" value="Thanks for the response!" id = "checkbox">
+                <label>Thanks for the response!</label>
+            </div>
+            <button class="btn btn-info float-end " id="btnPreview">Preview & Send</button>
+        </div>
+    </section>
+</body>
+

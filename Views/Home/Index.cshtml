@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>  
+  <script>  
+        $(document).ready(function () {  
+            $("#btnSave").click(function () {  
+                $.ajax({  
+                    type: "POST",
+                    url: "/Home/Index",
+                    data: {  
+                        Name: $("#txtName").val(),
+                        Password: $("#txtPwd").val(), 
+                    },
+                    success: function(data){
+                        if(data == 2){
+                            window.location.href = '@Url.Action("AdminTemplate", "Home")';
+                        }
+                        else if(data == 1){
+                            window.location.href = '@Url.Action("UserTemplate", "Home")';
+                        }
+                        else{
+                            window.alert("UserName or Password incorrect");
+                        }
+                    },  
+                });  
+            });  
+        });  
+  </script>
+</head>
+<body>
+   <h3 class="card-title text-center text-primary"> LOGIN FORM </h3>
+    <div class="form-container">
+        <form action="" method="post">
+        <input type="text" id="txtName" name="name" required placeholder="Enter UserName"><br><br>
+        <input type="password" id="txtPwd" name="password" required placeholder="Enter Password"><br><br>
+        <input type="button" name="submit" value="Login" class="btn btn-primary btn-block" id="btnSave"><br><br>
+        <p>Don't have an account? <br/> <a href="/Home/Register">Register now</a></p><br><br>
+        </form>
+    </div>
+
+</body>
+</html>
