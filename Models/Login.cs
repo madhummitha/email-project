@@ -5,17 +5,26 @@ using System.ComponentModel.DataAnnotations;
 
 namespace smsproject.Models;
 
-public class EmpModel
+public class LoginModel
 
 {
-    public string? Name {get; set;}
+    public string? Email {get; set;}
     public string? Password {get; set;}
 }
 
-public class EmpRegister
+public class RegisterModel
 {
     public string? UserName {get; set;}
     public string? Password{get;set;}
     public string? Email{get; set;}
     public string? Role{get; set;}
+}
+
+public class MsgModel
+
+{
+    public string? toEmail {get; set;}
+    public string? message {get; set;}
+    public string? sentTime {get; set;}
+    public string? fromEmail {get; set;}
 }

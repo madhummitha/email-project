@@ -8,42 +8,120 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login Page</title>
+<style>
+#snackbar {
+  visibility: hidden;
+  min-width: 250px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  right: 5%;
+  top: 70px;
+  font-size: 17px;
+}
 
+#snackbar.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@@-webkit-keyframes fadein {
+  from {top: 0; opacity: 0;} 
+  to {top: 70px; opacity: 1;}
+}
+
+@@keyframes fadein {
+  from {top: 0; opacity: 0;}
+  to {top: 70px; opacity: 1;}
+}
+
+@@-webkit-keyframes fadeout {
+  from {top: 70px; opacity: 1;} 
+  to {top: 0; opacity: 0;}
+}
+
+@@keyframes fadeout {
+  from {top: 70px; opacity: 1;}
+  to {top: 0; opacity: 0;}
+}
+</style>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>  
   <script>  
+        function showToast(isSuccess, toastMsg) {
+        var toast = document.getElementById("snackbar");
+        toast.className = "show";
+        if(isSuccess){
+            toast.innerHTML = toastMsg;
+            toast.style.backgroundColor = "#5cb85c";
+        }
+        else{
+            toast.innerHTML = toastMsg;
+            toast.style.backgroundColor = "#d9534f";
+        }
+        setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 2000);
+        }
+
         $(document).ready(function () {  
-            $("#btnSave").click(function () {  
-                $.ajax({  
-                    type: "POST",
-                    url: "/Home/Index",
-                    data: {  
-                        Name: $("#txtName").val(),
-                        Password: $("#txtPwd").val(), 
-                    },
-                    success: function(data){
-                        if(data == 2){
-                            window.location.href = '@Url.Action("AdminTemplate", "Home")';
-                        }
-                        else if(data == 1){
-                            window.location.href = '@Url.Action("UserTemplate", "Home")';
-                        }
-                        else{
-                            window.alert("UserName or Password incorrect");
-                        }
-                    },  
-                });  
+            $("#login-form").submit(function (e) {  
+                e.preventDefault(); 
+                let email = $("#txtEmail").val();
+                let password = $("#txtPwd").val();
+
+                var re = /\S+@@\S+\.\S+/;
+                if (re.test(email)){
+                    $.ajax({  
+                        type: "POST",
+                        url: "/Home/Index",
+                        data: {  
+                            Email: email,
+                            Password: password, 
+                        },
+                        success: function(data){
+                            if (data == 2 || data == 1) {
+                                localStorage.setItem("currentUser", email)
+                            } 
+                            if(data == 2){
+                                showToast(true, "Login Success");
+                                setTimeout(function(){
+                                    window.location.href = '@Url.Action("AdminTemplate", "Home")';
+                                    document.getElementById('login-form').reset();
+                                }, 2000);     
+                                
+                            }
+                            else if(data == 1){
+                                showToast(true, "Login Success");
+                                setTimeout(function(){
+                                    window.location.href = '@Url.Action("UserTemplate", "Home")';
+                                    document.getElementById('login-form').reset();
+                                }, 2000);     
+                                
+                            }
+                            else{
+                                showToast(false, "UserName or Password incorrect");
+                            }
+                        },  
+                    });  
+                } else {
+                    showToast(false, "Invalid Email");
+                }
             });  
         });  
   </script>
 </head>
 <body>
+    <div id="snackbar"></div>
    <h3 class="card-title text-center text-primary"> LOGIN FORM </h3>
-    <div class="form-container">
-        <form action="" method="post">
-        <input type="text" id="txtName" name="name" required placeholder="Enter UserName"><br><br>
-        <input type="password" id="txtPwd" name="password" required placeholder="Enter Password"><br><br>
-        <input type="button" name="submit" value="Login" class="btn btn-primary btn-block" id="btnSave"><br><br>
-        <p>Don't have an account? <br/> <a href="/Home/Register">Register now</a></p><br><br>
+    <div class="form-container mx-auto text-center">
+        <form action="" method="post" id="login-form">
+            <input type="text" id="txtEmail" name="email" required placeholder="Enter Email"><br><br>
+            <input type="password" id="txtPwd" name="password" required placeholder="Enter Password"><br><br>
+            <input type="submit" name="submit" value="Login" class="btn btn-primary btn-block" id="btnSave"><br><br>
+            <p>Don't have an account? <br/> <a href="/Home/Register">Register now</a></p><br><br>
         </form>
     </div>
 

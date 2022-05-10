@@ -21,10 +21,12 @@
             $.ajax(  
             {  
                 type: "POST", 
-                url: "/Home/Preview",  
+                url: "/Home/Send",  
                 data: { 
-                    Email: email,  
-                    Checkbox: msg
+                    toEmail: email,  
+                    message: msg,
+                    sentTime: today.toUTCString(),
+                    fromEmail: localStorage.getItem("currentUser")
                 },
                 success: function(data){
                     window.location.href = '@Url.Action("Preview", "Home")';

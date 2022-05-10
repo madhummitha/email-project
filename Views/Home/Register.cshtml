@@ -4,46 +4,116 @@
     ViewData["Title"] = "Register Page";
 }
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>  
+<style>
+#snackbar {
+  visibility: hidden;
+  min-width: 250px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  right: 5%;
+  top: 70px;
+  font-size: 17px;
+}
+
+#snackbar.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@@-webkit-keyframes fadein {
+  from {top: 0; opacity: 0;} 
+  to {top: 70px; opacity: 1;}
+}
+
+@@keyframes fadein {
+  from {top: 0; opacity: 0;}
+  to {top: 70px; opacity: 1;}
+}
+
+@@-webkit-keyframes fadeout {
+  from {top: 70px; opacity: 1;} 
+  to {top: 0; opacity: 0;}
+}
+
+@@keyframes fadeout {
+  from {top: 70px; opacity: 1;}
+  to {top: 0; opacity: 0;}
+}
+</style>
 <script>  
+    function showToast(isSuccess, toastMsg) {
+    var toast = document.getElementById("snackbar");
+    toast.className = "show";
+    if(isSuccess){
+        toast.innerHTML = toastMsg;
+        toast.style.backgroundColor = "#5cb85c";
+    }
+    else{
+        toast.innerHTML = toastMsg;
+        toast.style.backgroundColor = "#d9534f";
+    }
+    setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 2000);
+}
     $(document).ready(function () {  
-        $("#btnSave").click(function () {  
+        $("#register-form").submit(function (e) { 
+            e.preventDefault(); 
             let username = $("#txtName").val();
-            $.ajax({  
+            let password = $("#txtPwd").val();
+            let email = $("#txtEmail").val();
+            let role = $("#txtRole option:selected").val();
+
+            var re = /\S+@@\S+\.\S+/;
+            if (re.test(email)){
+                $.ajax({  
                 type: "POST", 
                 url: "/Home/Register",  
                 data: { 
                     UserName: username,  
-                    Password: $("#txtPwd").val(),
-                    Email: $("#txtEmail").val(),
-                    Role: $("#txtRole").val()
+                    Password: password,
+                    Email: email,
+                    Role: role
                 },
                 success: function(data){
-                    if(data == 2){
-                        window.location.href = '@Url.Action("AdminTemplate", "Home")';
-                    }
-                    else if(data == 1){
-                        window.location.href = '@Url.Action("UserTemplate", "Home")';
+                    if(data == 1){
+                        showToast(true, "Registration Success");
+                        setTimeout(function(){
+                            window.location.href = '@Url.Action("Index", "Home")';
+                        }, 2000);     
+                        document.getElementById('register-form').reset();
                     }    
                     else{
-                            window.alert("Registration Error");
-                        }
+                        showToast(false, "Registration Error");
+                    }
                 },
-            });  
+                });  
+            } else {
+                showToast(false, "Invalid Email");
+            }
         });  
     });  
 </script>  
 </head>
 
 <body>
+    <div id="snackbar"></div>
    <h3 class="card-title text-center text-primary"> REGISTRATION FORM </h3>
-    <div class="form-container">
-        <form action="" method="post">
+    <div class="form-container mx-auto text-center">
+        <form action="" method="post" id="register-form">
+            <label>Role</label>
+            <select name="role" id="txtRole">
+                <option value="user" selected>User</option>
+                <option value="admin">Admin</option>
+            </select><br><br>
             <input type="text" name="username" id="txtName" required placeholder="Enter UserName"><br><br>
+            <input type="text" name="email" id="txtEmail" required placeholder="Enter Email"><br><br>
             <input type="password" name="password" id="txtPwd" required placeholder="Enter Password"><br><br>
-            <input type="email" name="email" id="txtEmail" required placeholder="Enter Email"><br><br>
-            <input type="text" name="role" id="txtRole" required placeholder="Enter Role"><br><br>
-            <input type="button" name="submit" value="Register" class="btn btn-primary btn-block" id="btnSave"><br><br>
-            
+            <input type="submit" name="submit" value="Register" class="btn btn-primary btn-block" id="btnSave"><br><br>
         </form>
     </div>
 </body>

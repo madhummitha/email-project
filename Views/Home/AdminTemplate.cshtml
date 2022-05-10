@@ -3,11 +3,67 @@
 }
 
 <head>
+<style>
+.form-popup {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  right: 15px;
+  border: 3px solid #f1f1f1;
+  z-index: 9;
+}
 
+.form-container {
+  max-width: 300px;
+  padding: 0 10px;
+  background-color: white;
+}
+.form-container .pop-title {
+    margin: 10px;
+    padding: 0;
+}
+
+.form-container input[type=text] {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  border: none;
+  background: #f1f1f1;
+}
+
+.form-container input[type=text]:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+.form-container .popup-btn {
+  background-color: #04AA6D;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom:10px;
+  opacity: 0.8;
+}
+
+.form-container .cancel {
+  background-color: red;
+}
+
+.form-container .popup-btn:hover {
+  opacity: 1;
+}
+</style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>  
 <script>  
-    function addNewMessage() {
-        let msg = document.getElementById('newTemplateMsg').value;
+    var currentEditId = "";
+
+
+        function addNewMessage() {
+        let msgDiv = document.getElementById('newTemplateMsg');
+        let msg = msgDiv.value.replace(/\n/g, '<br>');
+        msgDiv.value = "";
         var containerDiv = document.createElement('div');
     
     let randomId = Math.random().toString(36).slice(2);
@@ -67,15 +123,25 @@
         divToDel.remove();
     }
     function onEdit(randomId){
-        var msgLabel = document.querySelector(`#${randomId} .col .innerDiv .msgText`)
-        let updatedMsg = prompt("Enter updated message", msgLabel.innerHTML);
-        if(updatedMsg != null && updatedMsg != ""){
-            msgLabel.innerHTML = updatedMsg;
-        }
+        currentEditId = randomId;
+        var msgLabel = document.querySelector(`#${randomId} .col .innerDiv .msgText`);
+        document.getElementById("edit-popup").value = msgLabel.innerHTML;
+        document.getElementById("myForm").style.display = "block";
     }
-    
+
+    function closeForm() {
+        document.getElementById("myForm").style.display = "none";
+    }
 
     $(document).ready(function () {  
+        $("#edit-popup-form").submit(function(e) {
+            e.preventDefault();
+            let updatedInput = $("#edit-popup").val();
+            updatedInput = updatedInput.replace(/\n/g, '<br>');
+            var msgLabel = document.querySelector(`#${currentEditId} .col .innerDiv .msgText`);
+            msgLabel.innerHTML = updatedInput;
+            closeForm();
+        });
         $("#btnPreview").click(function () {  
             let email = $("#email").val();
             let msg;
@@ -90,10 +156,12 @@
             $.ajax(  
             {  
                 type: "POST", 
-                url: "/Home/Preview",  
+                url: "/Home/Send",  
                 data: { 
-                    Email: email,  
-                    Checkbox: msg
+                    toEmail: email,  
+                    message: msg.replace(/(<([^>]+)>)/gi, ' '),
+                    sentTime: today.toUTCString(),
+                    fromEmail: localStorage.getItem("currentUser")
                 },
                 success: function(data){
                     window.location.href = '@Url.Action("Preview", "Home")';
@@ -189,11 +257,21 @@
                 <button class="btn btn-info" id="btnPreview" >Preview & Send</button>
             </div>
             <div class = "d-flex bd-highlight mb-3">
-                <input type ="text" class= "flex-grow-1 form-control" id="newTemplateMsg"  placeholder = "Create a new template message...">&nbsp; 
-                <button class="btn btn-secondary float-right" type="submit" onclick="addNewMessage()">+</button>  
+                <textarea class= "flex-grow-1 form-control" id="newTemplateMsg"  placeholder = "Create a new template message..."></textarea>&nbsp; 
+                <button class="btn btn-secondary" type="submit" onclick="addNewMessage()">Add</button>  
             </div>
         </div>
     </section>
+
+    <div class="form-popup" id="myForm">
+        <form id="edit-popup-form" class="form-container">
+            <h2 class="pop-title">Update Message</h2>
+            <label for="text"><b>Edit</b></label>
+            <textarea class= "flex-grow-1 form-control" id="edit-popup" rows="5"></textarea>&nbsp; 
+            <input type="submit" class="popup-btn" value="Update">
+            <button type="button" class="popup-btn cancel" onclick="closeForm()">Close</button>
+        </form>
+    </div>
 </body>
 
 
