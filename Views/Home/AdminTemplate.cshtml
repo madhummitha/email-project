@@ -59,14 +59,13 @@
 <script>  
     var currentEditId = "";
 
-
-        function addNewMessage() {
+    function addNewMessage() {
         let msgDiv = document.getElementById('newTemplateMsg');
         let msg = msgDiv.value.replace(/\n/g, '<br>');
         msgDiv.value = "";
         var containerDiv = document.createElement('div');
     
-    let randomId = Math.random().toString(36).slice(2);
+        let randomId = Math.random().toString(36).slice(2);
         containerDiv.id = randomId;
         containerDiv.className =
             'msgDiv container p-2 mb-3 bd-highlight border border-dark';
@@ -77,46 +76,47 @@
         var innerDiv = document.createElement('div');
         innerDiv.className = "innerDiv"
 
-    var checkInput = document.createElement('input');
-    checkInput.type = 'checkbox';
-    checkInput.name = 'selectMsg';
-    checkInput.value = msg;
-    checkInput.id = 'checkbox';
+        var checkInput = document.createElement('input');
+        checkInput.type = 'checkbox';
+        checkInput.name = 'selectMsg';
+        checkInput.value = msg;
+        checkInput.id = 'checkbox';
+        checkInput.className = 'selectMsg';
 
-    var checkLabel = document.createElement('label');
-    checkLabel.className = 'msgText fs-5 mx-2';
-    checkLabel.innerHTML = msg;
+        var checkLabel = document.createElement('label');
+        checkLabel.className = 'msgText fs-5 mx-2';
+        checkLabel.innerHTML = msg;
 
-    var buttonsDiv = document.createElement('div');
-    
-    var editButton = document.createElement('button');
-    editButton.className = 'btn btn-secondary btn-sm m-1';
-    
-    editButton.innerHTML = 'Edit';
+        var buttonsDiv = document.createElement('div');
 
-    var delButton = document.createElement('button');
-    delButton.className = 'btn btn-danger btn-sm m-1';
-    
-    delButton.innerHTML = 'Del';
+        var editButton = document.createElement('button');
+        editButton.className = 'btn btn-secondary btn-sm m-1';
 
-    buttonsDiv.appendChild(editButton);
-    buttonsDiv.appendChild(delButton);
+        editButton.innerHTML = 'Edit';
 
-    innerDiv.appendChild(checkInput);
-    innerDiv.appendChild(checkLabel);
+        var delButton = document.createElement('button');
+        delButton.className = 'btn btn-danger btn-sm m-1';
 
-    colDiv.appendChild(innerDiv);
-    colDiv.appendChild(buttonsDiv);
+        delButton.innerHTML = 'Del';
 
-    containerDiv.appendChild(colDiv);
+        buttonsDiv.appendChild(editButton);
+        buttonsDiv.appendChild(delButton);
 
-    document.getElementById('main-item-div').appendChild(containerDiv);
-    editButton.addEventListener('click',function(e){
-        onEdit(randomId)
-    })
-    delButton.addEventListener('click',function(e){
-        onDel(randomId)
-    })
+        innerDiv.appendChild(checkInput);
+        innerDiv.appendChild(checkLabel);
+
+        colDiv.appendChild(innerDiv);
+        colDiv.appendChild(buttonsDiv);
+
+        containerDiv.appendChild(colDiv);
+
+        document.getElementById('main-item-div').appendChild(containerDiv);
+        editButton.addEventListener('click',function(e){
+            onEdit(randomId)
+        })
+        delButton.addEventListener('click',function(e){
+            onDel(randomId)
+        })
     }
     function onDel(elemId) {
         var divToDel = document.getElementById(elemId);
@@ -140,6 +140,8 @@
             updatedInput = updatedInput.replace(/\n/g, '<br>');
             var msgLabel = document.querySelector(`#${currentEditId} .col .innerDiv .msgText`);
             msgLabel.innerHTML = updatedInput;
+            var msgCheckbox = document.querySelector(`#${currentEditId} .col .innerDiv .selectMsg`);
+            msgCheckbox.value = updatedInput;
             closeForm();
         });
         $("#btnPreview").click(function () {  
@@ -181,7 +183,7 @@
             <div id="msg0" class="msgDiv container p-2 mb-3 bd-highlight border border-dark">
                 <div class = "col d-flex align-items-center justify-content-between">
                     <div class="innerDiv">
-                        <input type="checkbox" name="selectMsg" value="Hope this mail finds you well!" id = "checkbox">
+                        <input type="checkbox" class="selectMsg" name="selectMsg" value="Hope this mail finds you well!" id = "checkbox">
                         <label class="msgText fs-5 mx-2">Hope this mail finds you well!</label>
                     </div>
                     <div>
@@ -193,7 +195,7 @@
             <div id="msg1" class="msgDiv container p-2 mb-3 bd-highlight border border-dark">
                 <div class = "col d-flex align-items-center justify-content-between">
                     <div class="innerDiv">
-                        <input type="checkbox" name="selectMsg" value="It's great to hear from you!" id = "checkbox">
+                        <input type="checkbox" class="selectMsg" name="selectMsg" value="It's great to hear from you!" id = "checkbox">
                         <label class="msgText fs-5 mx-2">It's great to hear from you!</label>
                     </div>
                     <div>
@@ -205,7 +207,7 @@
             <div id="msg2" class="msgDiv container p-2 mb-3 bd-highlight border border-dark">
                 <div class = "col d-flex align-items-center justify-content-between">
                     <div class="innerDiv">
-                        <input type="checkbox" name="selectMsg" value="Thankyou for your help!" id = "checkbox">
+                        <input type="checkbox" class="selectMsg" name="selectMsg" value="Thankyou for your help!" id = "checkbox">
                         <label class="msgText fs-5 mx-2">Thankyou for your help!</label>
                     </div>
                     <div>
@@ -217,7 +219,7 @@
             <div id="msg3" class="msgDiv container p-2 mb-3 bd-highlight border border-dark">
                 <div class = "col d-flex align-items-center justify-content-between">
                     <div class="innerDiv">
-                        <input type="checkbox" name="selectMsg" value="Will get back to you!" id = "checkbox">
+                        <input type="checkbox" class="selectMsg" name="selectMsg" value="Will get back to you!" id = "checkbox">
                         <label class="msgText fs-5 mx-2">Will get back to you!</label>
                     </div>
                     <div>
@@ -229,7 +231,7 @@
             <div id="msg4" class="msgDiv container p-2 mb-3 bd-highlight border border-dark">
                 <div class = "col d-flex align-items-center justify-content-between">
                     <div class="innerDiv">
-                        <input type="checkbox" name="selectMsg" value="Congratulations on your achievement!" id = "checkbox">
+                        <input type="checkbox" class="selectMsg" name="selectMsg" value="Congratulations on your achievement!" id = "checkbox">
                         <label class="msgText fs-5 mx-2">Congratulations on your achievement!</label>
                     </div>
                     <div>
@@ -241,7 +243,7 @@
             <div id="msg5" class="msgDiv container p-2 mb-3 bd-highlight border border-dark">
                 <div class = "col d-flex align-items-center justify-content-between">
                     <div class="innerDiv">
-                        <input type="checkbox" name="selectMsg" value="Thanks for the response!" id = "checkbox">
+                        <input type="checkbox" class="selectMsg" name="selectMsg" value="Thanks for the response!" id = "checkbox">
                         <label class="msgText fs-5 mx-2">Thanks for the response!</label>
                     </div>
                     <div>
