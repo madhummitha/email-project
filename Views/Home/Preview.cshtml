@@ -9,16 +9,21 @@
         var emailDOM = document.getElementById('email');
         var msgDOM = document.getElementById('msg');
         var dateDOM = document.getElementById('timestamp');
+        var userDOM = document.getElementById('currentUser');
 
         emailDOM.innerHTML=localStorage.getItem('toEmail');
         msgDOM.innerHTML=localStorage.getItem('sendMsg');
         dateDOM.innerHTML=localStorage.getItem('msgTime');
+        userDOM.innerHTML=localStorage.getItem('currentUser');
      })
 </script>  
 </head>
 <body>
     <p class="text-center fs-2 text-decoration-underline">PREVIEW</p>
     <div class="container mt-5 mb-3 bd-highlight border border-dark w-50">
+        <div><span class="fs-4">FROM EMAIL ID:</span>
+            <p class="text-info" id = "currentUser"></p>
+        </div>
         <div><span class="fs-4">EMAIL ID:</span>
             <p class="text-danger" id = "email"></p>
         </div>
