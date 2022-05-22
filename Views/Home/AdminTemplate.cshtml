@@ -148,7 +148,7 @@
             let email = $("#email").val();
             let msg;
             $('input[name="selectMsg"]:checked').each(function (){
-                msg = `${msg ? `${msg}, `: ""} ${this.value}`
+                msg = `${msg ? `${msg}<br>  `: ""} ${this.value}`
             });
             const timeElapsed = Date.now();
             const today = new Date(timeElapsed);
